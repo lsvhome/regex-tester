@@ -1,25 +1,19 @@
 ﻿@page "/"
 @using System.Diagnostics
 @using System
+@using System.Text.RegularExpressions;
 
 
 <h1>C# Regex Tester</h1>
 Pattern:
-@*<br />
-    <input id="fgzx" type="text" class="wide" @bind -value="@pattern" @bind -value:event="oninput" />*@
-
-<br />
-<input id="fgfzx" type="text" class="wide" @bind="@pattern" />
-<br />
-<input id="fgfzx" type="text" class="wide" @bind="@pattern" @oninput="@ReCalc" />
+<input id="fgfzx" type="text" class="wide" @bind="@pattern" @oninput="@ReCalcPattern" />
 
 @*<button @onclick="@ReCalc">fff</button>*@
 <br />
 
 Text:
-@pattern
 <br />
-<textarea id="fdfgc" class="wide">
+<textarea id="fdfgc" class="wide" @bind="@text" @oninput="@ReCalcText">
 
 </textarea>
 <br />
@@ -34,26 +28,56 @@ Results:@res
 @code
     {
  private string pattern { get; set; }
+public string text { get; set; }
 public string pattern1 { get; set; }
 public string res { get; set; } = "";
 
 protected override async Task OnInitAsync()
 {
-pattern = "2";
+#if DEBUG
+pattern = "2?";
 pattern1 = "1";
+text = "dadf 3  2s fdsf 2a g";
+#endif
 }
 
-async Task ReCalc(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
+async Task ReCalcPattern(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
 {
 @*@((UIChangeEventArgs __e) => CurrentValue = __e.Value)*@
-object h = g.Value;
-string gds = (string)h;
+//object h = g.Value;
+//string gds = (string)h;
 pattern = (string)g.Value;
-    Debug.WriteLine(pattern);
-Debug.WriteLine(g);
+//    Debug.WriteLine(pattern);
+//Debug.WriteLine(g);
 
-    res = pattern + pattern1;
-
+    //res = pattern + pattern1;
+ReCalc();
 }
 
+
+
+
+async Task ReCalcText(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
+{
+@*@((UIChangeEventArgs __e) => CurrentValue = __e.Value)*@
+//object h = g.Value;
+//string gds = (string)h;
+text = (string)g.Value;
+//    Debug.WriteLine(pattern);
+//Debug.WriteLine(g);
+
+    //res = pattern + pattern1;
+ReCalc();
+}
+
+async Task ReCalc()
+{
+res = "";
+            var g = Regex.Matches(text, pattern);
+            foreach(Match e in g)
+            {
+res +=                e.Success.ToString() + "\r\n";
+            }
+
+}
 }
