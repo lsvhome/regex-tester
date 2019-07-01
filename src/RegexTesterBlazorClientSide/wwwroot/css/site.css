@@ -96,6 +96,19 @@ app {
     color: red;
 }
 
+input[type="text"].wide {
+    min-width: 500px;
+    max-width: 100%;
+    width: 100%;
+}
+textarea.wide {
+    min-width: 500px;
+    max-width: 100%;
+    min-height: 50px;
+    height: 100%;
+    width: 100%;
+}
+
 @media (max-width: 767.98px) {
     .main .top-row {
         display: none;
