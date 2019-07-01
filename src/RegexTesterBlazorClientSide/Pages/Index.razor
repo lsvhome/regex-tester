@@ -1,7 +1,59 @@
 ﻿@page "/"
+@using System.Diagnostics
+@using System
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+<h1>C# Regex Tester</h1>
+Pattern:
+@*<br />
+    <input id="fgzx" type="text" class="wide" @bind -value="@pattern" @bind -value:event="oninput" />*@
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<br />
+<input id="fgfzx" type="text" class="wide" @bind="@pattern" />
+<br />
+<input id="fgfzx" type="text" class="wide" @bind="@pattern" @oninput="@ReCalc" />
+
+@*<button @onclick="@ReCalc">fff</button>*@
+<br />
+
+Text:
+@pattern
+<br />
+<textarea id="fdfgc" class="wide">
+
+</textarea>
+<br />
+
+Results:@res
+<br />
+<textarea id="fgcfrx" class="wide">@res</textarea>
+<br />
+
+
+
+@code
+    {
+ private string pattern { get; set; }
+public string pattern1 { get; set; }
+public string res { get; set; } = "";
+
+protected override async Task OnInitAsync()
+{
+pattern = "2";
+pattern1 = "1";
+}
+
+async Task ReCalc(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
+{
+@*@((UIChangeEventArgs __e) => CurrentValue = __e.Value)*@
+object h = g.Value;
+string gds = (string)h;
+pattern = (string)g.Value;
+    Debug.WriteLine(pattern);
+Debug.WriteLine(g);
+
+    res = pattern + pattern1;
+
+}
+
+}
