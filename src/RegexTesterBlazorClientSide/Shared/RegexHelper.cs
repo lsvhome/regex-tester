@@ -11,6 +11,17 @@ namespace RegexTesterBlazorClientSide.Shared
         {
             System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"abcd.*");
             var g = Regex.Matches(text, pattern);
+            string h = "";
+            RegexOptions s = RegexOptions.None;
+            //Enum.Parse(typeof(RegexOptions),h)
+            //bool c = s & Enum.GetValues(typeof(RegexOptions))
+            Dictionary<string, string> RegexOpt  = new Dictionary<string, string>();
+            //RegexOpt.ContainsKey()
+            //Enum.GetValues()
+            //string optionName = "";
+            //RegexOptions x = (RegexOptions)Enum.Parse(typeof(RegexOptions), optionName);
+            //var g = Regex.Matches(text, pattern, regexOptions);
+
             foreach (Match e in g)
             {
                 foreach (Group gg in e.Groups)

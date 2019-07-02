@@ -1,17 +1,42 @@
 ﻿@page "/"
 @using System.Diagnostics
+@using System.Collections.Generic
 @using System
 @using System.Text.RegularExpressions;
 
 
 <h1>C# Regex Tester</h1>
 
+@*<script type="text/javascript">
 
-<input id="autoruncheckbox" type="checkbox" checked /> <label for="autoruncheckbox">AutoRun</label>
+        function RegexOptionsCheckboxClickedJS(name, value) {
+            debugger.log(mame);
+            //Debug.WriteLine(name + "="+value);
+        }
+
+    </script>*@
+
+<input id="autoruncheckbox" type="checkbox" @bind="@autorun" /> <label for="autoruncheckbox">AutoRun</label>
 <br />
 <button @onclick="@ReCalc">Run</button>
 <br />
+<ul>
+    @foreach (var each in Enum.GetNames(typeof(RegexOptions)))
+    {
 
+        <li>
+            <input id="regexoptions" type="checkbox" value="@each"
+                   onchange=@(eventArgs => { RegexOptionsChanged(each, (bool)eventArgs.Value); }) /> <label for="regexoptions">@each</label>
+            </li>
+        }
+
+    @*
+
+        aaa(@each, eventArgs.Value);
+
+
+    *@
+</ul>
 <input type="radio" id="pattern" name="regexsourceradio" checked="@(RegexSource == 1)" onchange="@(() => RegexSource = 1)" />
 <label for="patterninput">Pattern:</label>
 <br />
@@ -25,14 +50,14 @@
 <br />
 
 
-Text:
+    Text:
 <br />
 <textarea id="fdfgc" class="wide" @bind="@text" @oninput="@ReCalcText">
 
 </textarea>
 <br />
 
-Results:@res
+    Results:
 <br />
 <textarea id="fgcfrx" class="wide">@res</textarea>
 <br />
@@ -42,71 +67,104 @@ Results:@res
 @code
     {
 
-public int RegexSource { get; set; } = 1;
- private string pattern { get; set; }
-public string cscode { get; set; }
-public string text { get; set; }
-public string pattern1 { get; set; }
-public string res { get; set; } = "";
+    RegexOptions regexOptions = RegexOptions.None;
+    public int RegexSource { get; set; } = 1;
+    public bool autorun { get; set; } = true;
+    private string pattern { get; set; }
+    public string cscode { get; set; }
+    public string text { get; set; }
+    public string pattern1 { get; set; }
+    public string res { get; set; } = "";
 
-protected override async Task OnInitAsync()
-{
-#if DEBUG
-pattern = "2?";
-pattern1 = "1";
-text = "dadf 3  2s fdsf 2a g";
-cscode = "System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(\u0040\"abcd.*\");";
-#endif
-}
+    protected override async Task OnInitAsync()
+    {
+    #if DEBUG
+    pattern = "2.?";
+    pattern1 = "1";
+    text = "dadf 3  2s fdsf 2a g";
+    cscode = "System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(\u0040\"abcd.*\");";
+    #endif
+    }
 
-async Task ReCalcCode(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
-{
-}
+    async Task RegexOptionsChanged(string optionName, bool optionValue)
+    {
+    //debugger.log(mame);
+    Debug.WriteLine(optionName + "=" + optionValue);
+    //Debug.WriteLine(value);
+    RegexOptions x = (RegexOptions)Enum.Parse(typeof(RegexOptions), optionName);
 
-async Task ReCalcPattern(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
-{
+
+    if (optionValue)
+    {
+    regexOptions = regexOptions | x;
+    }
+    else
+    {
+    regexOptions = regexOptions & x;
+    }
+
+        if (autorun) ReCalc();
+    }
+
+    async Task ReCalcCode(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
+    {
+    }
+
+    async Task ReCalcPattern(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
+    {
 @*@((UIChangeEventArgs __e) => CurrentValue = __e.Value)*@
-//object h = g.Value;
-//string gds = (string)h;
-pattern = (string)g.Value;
-//    Debug.WriteLine(pattern);
-//Debug.WriteLine(g);
+    //object h = g.Value;
+    //string gds = (string)h;
+    pattern = (string)g.Value;
+    //    Debug.WriteLine(pattern);
+    //Debug.WriteLine(g);
 
     //res = pattern + pattern1;
-ReCalc();
-}
+    if (autorun) ReCalc();
+    }
 
 
 
 
-async Task ReCalcText(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
-{
+    async Task ReCalcText(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
+    {
 @*@((UIChangeEventArgs __e) => CurrentValue = __e.Value)*@
-//object h = g.Value;
-//string gds = (string)h;
-text = (string)g.Value;
-//    Debug.WriteLine(pattern);
-//Debug.WriteLine(g);
+    //object h = g.Value;
+    //string gds = (string)h;
+    text = (string)g.Value;
+    //    Debug.WriteLine(pattern);
+    //Debug.WriteLine(g);
 
     //res = pattern + pattern1;
-ReCalc();
-}
+    if (autorun) ReCalc();
+    }
 
-async Task ReCalc()
-{
-res = "";
-            var g = Regex.Matches(text, pattern);
-            foreach(Match e in g)
-            {
-res +=                e.Value+"(" ;
 
-foreach (Group gg in e.Groups)
-{
-res +=                gg.Value+"|" ;
-}
 
-res += ")\r\n";
-            }
 
-}
-}
+    async Task ReCalc()
+    {
+Debug.WriteLine("ReCalc");
+    res = "";
+    var g = Regex.Matches(text, pattern, regexOptions);
+    foreach(Match e in g)
+    {
+    res +=                e.Value+"(" ;
+
+    foreach (Group gg in e.Groups)
+    {
+    res +=                
+//"["+
+//gg.Name +
+//"]="+
+gg.Value+"|" ;
+    }
+
+    res += ")\r\n";
+    }
+
+    }
+
+
+
+    }

@@ -26,7 +26,7 @@ abcdeabcde";
                     Debug.Write($"{g.Name}={g.Value} |");
                     Console.Write($"{g.Name}={g.Value} |");
                     //gg.Value
-
+                    //g.Name
                     //e.Success;
                 }
 
