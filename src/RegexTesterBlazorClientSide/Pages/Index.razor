@@ -5,11 +5,25 @@
 
 
 <h1>C# Regex Tester</h1>
-Pattern:
-<input id="fgfzx" type="text" class="wide" @bind="@pattern" @oninput="@ReCalcPattern" />
 
-@*<button @onclick="@ReCalc">fff</button>*@
+
+<input id="autoruncheckbox" type="checkbox" checked /> <label for="autoruncheckbox">AutoRun</label>
 <br />
+<button @onclick="@ReCalc">Run</button>
+<br />
+
+<input type="radio" id="pattern" name="regexsourceradio" checked="@(RegexSource == 1)" onchange="@(() => RegexSource = 1)" />
+<label for="patterninput">Pattern:</label>
+<br />
+<input id="patterninput" type="text" class="wide" @bind="@pattern" @oninput="@ReCalcPattern" disabled="@(RegexSource != 1)" />
+<br />
+
+<input type="radio" id="code" name="regexsourceradio" checked="@(RegexSource == 2)" onchange="@(() => RegexSource = 2)" />
+<label for="codeinput">C# Regex code for matching:</label>
+<br />
+<input id="codeinput" type="text" class="wide" @bind="@cscode" @oninput="@ReCalcCode" disabled="@(RegexSource != 2)" />
+<br />
+
 
 Text:
 <br />
@@ -27,7 +41,10 @@ Results:@res
 
 @code
     {
+
+public int RegexSource { get; set; } = 1;
  private string pattern { get; set; }
+public string cscode { get; set; }
 public string text { get; set; }
 public string pattern1 { get; set; }
 public string res { get; set; } = "";
@@ -38,7 +55,12 @@ protected override async Task OnInitAsync()
 pattern = "2?";
 pattern1 = "1";
 text = "dadf 3  2s fdsf 2a g";
+cscode = "System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(\u0040\"abcd.*\");";
 #endif
+}
+
+async Task ReCalcCode(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
+{
 }
 
 async Task ReCalcPattern(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
@@ -76,7 +98,14 @@ res = "";
             var g = Regex.Matches(text, pattern);
             foreach(Match e in g)
             {
-res +=                e.Success.ToString() + "\r\n";
+res +=                e.Value+"(" ;
+
+foreach (Group gg in e.Groups)
+{
+res +=                gg.Value+"|" ;
+}
+
+res += ")\r\n";
             }
 
 }

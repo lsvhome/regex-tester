@@ -7,13 +7,21 @@ namespace RegexTesterBlazorClientSide.Shared
 {
     public class RegexHelper
     {
-        //public static string[] ff(string pattern, string text)
-        //{
-        //    var g = Regex.Matches(text, pattern);
-        //    foreach(Match e in g)
-        //    {
-        //        //e.Success;
-        //    }
-        //}
+        public static string[] ff(string pattern, string text)
+        {
+            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"abcd.*");
+            var g = Regex.Matches(text, pattern);
+            foreach (Match e in g)
+            {
+                foreach (Group gg in e.Groups)
+                {
+                    //gg.Value
+
+                    //e.Success;
+                }
+            }
+
+            return null;
+        }
     }
 }
