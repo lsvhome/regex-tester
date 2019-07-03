@@ -20,7 +20,10 @@
 <br />
 <button @onclick="@ReCalc">Run</button>
 <br />
-<ul>
+<button @onclick="@(()=>{RegexOptionsVisible=!RegexOptionsVisible;})">RegexOptions</button>
+<br />
+
+<ul style="display: @(RegexOptionsVisible ? "block":"none")">
     @foreach (var each in Enum.GetNames(typeof(RegexOptions)))
     {
 
@@ -59,14 +62,43 @@
 
     Results:
 <br />
-<textarea id="fgcfrx" class="wide">@res</textarea>
+@*<textarea id="fgcfrx" class="wide">@res</textarea>
+    <br />*@
+
+@if (Matches != null)
+{
+    <table border="1">
+        @foreach (Match m in Matches)
+        {
+            <tr>
+                @foreach (Group g in m.Groups)
+                {
+                    <td>
+                        @g.Value
+                    </td>
+                    <td>
+                        @g.Index
+                    </td>
+                    <td>
+                        @g.Length
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+}
+
+
 <br />
 
+@*@((MarkupString)Regex.Replace(text, "(\r)|(\n)|(\r\n)", "<br />"))*@
+@Decor()
+<br /><br /><br />
 
 
 @code
     {
-
+bool RegexOptionsVisible = false;
     RegexOptions regexOptions = RegexOptions.None;
     public int RegexSource { get; set; } = 1;
     public bool autorun { get; set; } = true;
@@ -75,6 +107,7 @@
     public string text { get; set; }
     public string pattern1 { get; set; }
     public string res { get; set; } = "";
+    MatchCollection Matches = null;
 
     protected override async Task OnInitAsync()
     {
@@ -146,14 +179,14 @@
     {
 Debug.WriteLine("ReCalc");
     res = "";
-    var g = Regex.Matches(text, pattern, regexOptions);
-    foreach(Match e in g)
+    Matches = Regex.Matches(text, pattern, regexOptions);
+    foreach(Match e in Matches)
     {
     res +=                e.Value+"(" ;
 
     foreach (Group gg in e.Groups)
     {
-    res +=                
+    res +=
 //"["+
 //gg.Name +
 //"]="+
@@ -165,6 +198,11 @@ gg.Value+"|" ;
 
     }
 
-
+MarkupString
+    Decor()
+    {
+return RegexHelper.Decor(text, Matches);
+    //return (MarkupString)Regex.Replace(text, "(\r)|(\n)|(\r\n)", "<br />");
+    }
 
     }

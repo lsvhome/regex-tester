@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Components;
+using System.Text;
+
 namespace RegexTesterBlazorClientSide.Shared
 {
     public class RegexHelper
@@ -33,6 +36,49 @@ namespace RegexTesterBlazorClientSide.Shared
             }
 
             return null;
+        }
+        public static MarkupString Decor(string text, MatchCollection matches)
+        {
+            //System.Collections.Generic.
+            gg[] g = new gg[text.Length];
+            for(int i = 0; i< text.Length; i++)
+            {
+                g[i] = new gg { x = text[i].ToString() };
+
+                if (g[i].x == "\r" || g[i].x == "\n")
+                {
+                    g[i].decorated = "<br />";
+                }
+            }
+
+            if (matches != null)
+            {
+                foreach (Match m in matches)
+                {
+                    foreach (Group gr in m.Groups)
+                    {
+                        for (int i = gr.Index; i < gr.Index + gr.Length; i++)
+                        {
+                            g[i].decorated = "<span class=\"group_"+ gr.Name + "\">" + g[i].x + "</span>";
+                        }
+
+                    }
+                }
+            }
+
+            StringBuilder ret = new StringBuilder();
+            for (int i = 0; i < g.Length; i++)
+            {
+                ret.Append(string.IsNullOrWhiteSpace(g[i].decorated) ? g[i].x : g[i].decorated);
+            }
+            return (MarkupString)ret.ToString();
+            //return (MarkupString)Regex.Replace(text, "(\r)|(\n)", "<br />");
+        }
+
+        class gg
+        {
+            public string x;
+            public string decorated;
         }
     }
 }

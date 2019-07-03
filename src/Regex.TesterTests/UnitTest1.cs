@@ -13,10 +13,10 @@ namespace Regex.TesterTests
             string text = 
 @"abcdeabcde
 abcdeabcde";
-            //System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"bcd(?<xx>.*)");
+            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"bcd(?<xx>.*)");
             //System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"bcd(.*)");
             //System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"bcd.*");
-            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"bcd");
+            //System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"bcd");
             var m = regex.Matches(text);
 
             foreach (Match e in m)
