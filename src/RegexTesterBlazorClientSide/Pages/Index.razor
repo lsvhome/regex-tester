@@ -61,38 +61,13 @@
 <br />
 
     Results:
-<br />
-@*<textarea id="fgcfrx" class="wide">@res</textarea>
-    <br />*@
 
+
+<br />
 @if (Matches != null)
 {
-    <table border="1">
-        @foreach (Match m in Matches)
-        {
-            <tr>
-                @foreach (Group g in m.Groups)
-                {
-                    <td>
-                        @g.Value
-                    </td>
-                    <td>
-                        @g.Index
-                    </td>
-                    <td>
-                        @g.Length
-                    </td>
-                }
-            </tr>
-        }
-    </table>
+    @Decor()
 }
-
-
-<br />
-
-@*@((MarkupString)Regex.Replace(text, "(\r)|(\n)|(\r\n)", "<br />"))*@
-@Decor()
 <br /><br /><br />
 
 
@@ -105,15 +80,15 @@ bool RegexOptionsVisible = false;
     private string pattern { get; set; }
     public string cscode { get; set; }
     public string text { get; set; }
-    public string pattern1 { get; set; }
-    public string res { get; set; } = "";
-    MatchCollection Matches = null;
+@*public string pattern1 { get; set; }*@
+@*public string res { get; set; } = "";*@
+    MatchCollection Matches { get; set; }
 
     protected override async Task OnInitAsync()
     {
     #if DEBUG
-    pattern = "2.?";
-    pattern1 = "1";
+    pattern = "2(?<xx>.?)";
+    @*pattern1 = "1";*@
     text = "dadf 3  2s fdsf 2a g";
     cscode = "System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(\u0040\"abcd.*\");";
     #endif
@@ -133,10 +108,10 @@ bool RegexOptionsVisible = false;
     }
     else
     {
-    regexOptions = regexOptions & x;
+    regexOptions = regexOptions ^ x;
     }
-
-        if (autorun) ReCalc();
+    Debug.WriteLine($"regexOptions={(int)regexOptions}");
+    if (autorun) ReCalc();
     }
 
     async Task ReCalcCode(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
@@ -145,7 +120,7 @@ bool RegexOptionsVisible = false;
 
     async Task ReCalcPattern(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
     {
-@*@((UIChangeEventArgs __e) => CurrentValue = __e.Value)*@
+    @*@((UIChangeEventArgs __e) => CurrentValue = __e.Value)*@
     //object h = g.Value;
     //string gds = (string)h;
     pattern = (string)g.Value;
@@ -161,7 +136,7 @@ bool RegexOptionsVisible = false;
 
     async Task ReCalcText(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
     {
-@*@((UIChangeEventArgs __e) => CurrentValue = __e.Value)*@
+    @*@((UIChangeEventArgs __e) => CurrentValue = __e.Value)*@
     //object h = g.Value;
     //string gds = (string)h;
     text = (string)g.Value;
@@ -177,31 +152,18 @@ bool RegexOptionsVisible = false;
 
     async Task ReCalc()
     {
-Debug.WriteLine("ReCalc");
-    res = "";
+    Debug.WriteLine("ReCalc");
+    @*res = "";*@
+    @*Matches = null;*@
     Matches = Regex.Matches(text, pattern, regexOptions);
-    foreach(Match e in Matches)
-    {
-    res +=                e.Value+"(" ;
 
-    foreach (Group gg in e.Groups)
-    {
-    res +=
-//"["+
-//gg.Name +
-//"]="+
-gg.Value+"|" ;
-    }
-
-    res += ")\r\n";
-    }
 
     }
 
-MarkupString
+    MarkupString
     Decor()
     {
-return RegexHelper.Decor(text, Matches);
+    return RegexHelper.Decor(text, pattern, Matches);
     //return (MarkupString)Regex.Replace(text, "(\r)|(\n)|(\r\n)", "<br />");
     }
 

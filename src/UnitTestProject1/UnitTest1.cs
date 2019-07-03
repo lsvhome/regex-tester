@@ -1,26 +1,28 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using Xunit;
 
-namespace Regex.TesterTests
+namespace UnitTestProject1
 {
+    [TestClass]
     public class UnitTest1
     {
-        [Fact]
-        public void Test1()
+        [TestMethod]
+        public void TestMethod1()
         {
             Trace.WriteLine("test trace");
             Debug.WriteLine("test debug");
             //TestContext.WriteLine("test context");
             Console.WriteLine("test console");
-            //ClassLibrary1.Class1.Test1();
+            ClassLibrary1.Class1.Test1();
         }
-        [Fact]
-        public void Test2()
+
+        [TestMethod]
+        public void TestMethod2()
         {
-            string text = 
-@"abcdeabcde
+            string text =
+ @"abcdeabcde
 abcdeabcde";
             System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"bcd(?<xx>.*)");
             //System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"bcd(.*)");
@@ -30,12 +32,12 @@ abcdeabcde";
 
             foreach (Match e in m)
             {
-                foreach (Match g in e.Groups)
+                foreach (Group g in e.Groups)
                 {
-                    Debug.Write($"{g.Name}={g.Value} |");
-                    Console.Write($"{g.Name}={g.Value} |");
+                    Debug.Write($"{g.GetType().Name}={g.Value} |");
+                    Console.Write($"{g.Index}={g.Value} |");
                     //gg.Value
-                    //g.Name
+                    string s = g.Name;
                     //e.Success;
                 }
 

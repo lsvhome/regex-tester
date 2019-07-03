@@ -1,25 +1,14 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using Xunit;
 
-namespace Regex.TesterTests
+namespace ClassLibrary1
 {
-    public class UnitTest1
+    public class Class1
     {
-        [Fact]
-        public void Test1()
+        public static void Test1()
         {
-            Trace.WriteLine("test trace");
-            Debug.WriteLine("test debug");
-            //TestContext.WriteLine("test context");
-            Console.WriteLine("test console");
-            //ClassLibrary1.Class1.Test1();
-        }
-        [Fact]
-        public void Test2()
-        {
-            string text = 
+            string text =
 @"abcdeabcde
 abcdeabcde";
             System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"bcd(?<xx>.*)");
@@ -30,12 +19,13 @@ abcdeabcde";
 
             foreach (Match e in m)
             {
-                foreach (Match g in e.Groups)
+                foreach (Group g in e.Groups)
                 {
-                    Debug.Write($"{g.Name}={g.Value} |");
-                    Console.Write($"{g.Name}={g.Value} |");
+                    bool b = g.GetType().GetProperty("Name") != null;
+                    Debug.Write($"{g.GetType().Name}={g.Value} ({b})|");
+                    //Console.Write($"{g.Index}={g.Value} |");
                     //gg.Value
-                    //g.Name
+                    
                     //e.Success;
                 }
 
