@@ -15,15 +15,17 @@
         }
 
     </script>*@
+    Text:
+<br />
+<textarea id="fdfgc" class="wide" @bind="@text" @oninput="@ReCalcText">
 
-<input id="autoruncheckbox" type="checkbox" @bind="@autorun" /> <label for="autoruncheckbox">AutoRun</label>
-<br />
-<button @onclick="@ReCalc">Run</button>
-<br />
-<button @onclick="@(()=>{RegexOptionsVisible=!RegexOptionsVisible;})">RegexOptions</button>
+</textarea>
 <br />
 
-<ul style="display: @(RegexOptionsVisible ? "block":"none")">
+<button @onclick="@(()=>{model.RegexOptionsVisible=!model.RegexOptionsVisible;})">RegexOptions</button>
+<br />
+
+<ul style="display: @(model.RegexOptionsVisible ? "block":"none")">
     @foreach (var each in Enum.GetNames(typeof(RegexOptions)))
     {
 
@@ -40,25 +42,23 @@
 
     *@
 </ul>
-<input type="radio" id="pattern" name="regexsourceradio" checked="@(RegexSource == 1)" onchange="@(() => RegexSource = 1)" />
+<input type="radio" id="pattern" name="regexsourceradio" checked="@(model.RegexSource == RegexSourceEnum.Pattern)" onchange="@(() => model.RegexSource = RegexSourceEnum.Pattern)" />
 <label for="patterninput">Pattern:</label>
 <br />
-<input id="patterninput" type="text" class="wide" @bind="@pattern" @oninput="@ReCalcPattern" disabled="@(RegexSource != 1)" />
+<input id="patterninput" type="text" class="wide" @bind="@model.Pattern" @oninput="@ReCalcPattern" disabled="@(model.RegexSource != RegexSourceEnum.Pattern)" />
 <br />
 
-<input type="radio" id="code" name="regexsourceradio" checked="@(RegexSource == 2)" onchange="@(() => RegexSource = 2)" />
+<input disabled type="radio" id="code" name="regexsourceradio" checked="@(model.RegexSource == RegexSourceEnum.CsCode)" onchange="@(() => model.RegexSource = RegexSourceEnum.CsCode)" />
 <label for="codeinput">C# Regex code for matching:</label>
 <br />
-<input id="codeinput" type="text" class="wide" @bind="@cscode" @oninput="@ReCalcCode" disabled="@(RegexSource != 2)" />
+<input id="codeinput" type="text" class="wide" @bind="@cscode" @oninput="@ReCalcCode" disabled="@(model.RegexSource != RegexSourceEnum.CsCode)" />
 <br />
 
-
-    Text:
+<input id="autoruncheckbox" type="checkbox" @bind="@model.Autorun" /> <label for="autoruncheckbox">AutoRun</label>
 <br />
-<textarea id="fdfgc" class="wide" @bind="@text" @oninput="@ReCalcText">
-
-</textarea>
+<button @onclick="@ReCalc">Run</button>
 <br />
+
 
     Results:
 
@@ -73,11 +73,12 @@
 
 @code
     {
-bool RegexOptionsVisible = false;
-    RegexOptions regexOptions = RegexOptions.None;
-    public int RegexSource { get; set; } = 1;
-    public bool autorun { get; set; } = true;
-    private string pattern { get; set; }
+IndexModel model = new IndexModel();
+//bool RegexOptionsVisible = false;
+//    RegexOptions regexOptions = RegexOptions.None;
+   // public int RegexSource { get; set; } = 1;
+    //public bool autorun { get; set; } = true;
+    //private string pattern { get; set; }
     public string cscode { get; set; }
     public string text { get; set; }
 @*public string pattern1 { get; set; }*@
@@ -87,8 +88,8 @@ bool RegexOptionsVisible = false;
     protected override async Task OnInitAsync()
     {
     #if DEBUG
-    pattern = "2(?<xx>.?)";
-    @*pattern1 = "1";*@
+    model.Pattern = "2(?"+"<"+"xx"+">"+".?)";
+@*pattern1 = "1";*@
     text = "dadf 3  2s fdsf 2a g";
     cscode = "System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(\u0040\"abcd.*\");";
     #endif
@@ -104,14 +105,14 @@ bool RegexOptionsVisible = false;
 
     if (optionValue)
     {
-    regexOptions = regexOptions | x;
+    model.RegexOptions = model.RegexOptions | x;
     }
     else
     {
-    regexOptions = regexOptions ^ x;
+    model.RegexOptions = model.RegexOptions ^ x;
     }
-    Debug.WriteLine($"regexOptions={(int)regexOptions}");
-    if (autorun) ReCalc();
+    Debug.WriteLine($"model.RegexOptions={(int)model.RegexOptions}");
+    if (model.Autorun) ReCalc();
     }
 
     async Task ReCalcCode(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
@@ -120,15 +121,15 @@ bool RegexOptionsVisible = false;
 
     async Task ReCalcPattern(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
     {
-    @*@((UIChangeEventArgs __e) => CurrentValue = __e.Value)*@
+@*@((UIChangeEventArgs __e) => CurrentValue = __e.Value)*@
     //object h = g.Value;
     //string gds = (string)h;
-    pattern = (string)g.Value;
-    //    Debug.WriteLine(pattern);
+    model.Pattern = (string)g.Value;
+    //    Debug.WriteLine(model.Pattern);
     //Debug.WriteLine(g);
 
-    //res = pattern + pattern1;
-    if (autorun) ReCalc();
+    //res = model.Pattern + model.Pattern1;
+    if (model.Autorun) ReCalc();
     }
 
 
@@ -136,15 +137,8 @@ bool RegexOptionsVisible = false;
 
     async Task ReCalcText(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
     {
-    @*@((UIChangeEventArgs __e) => CurrentValue = __e.Value)*@
-    //object h = g.Value;
-    //string gds = (string)h;
     text = (string)g.Value;
-    //    Debug.WriteLine(pattern);
-    //Debug.WriteLine(g);
-
-    //res = pattern + pattern1;
-    if (autorun) ReCalc();
+    if (model.Autorun) ReCalc();
     }
 
 
@@ -153,18 +147,13 @@ bool RegexOptionsVisible = false;
     async Task ReCalc()
     {
     Debug.WriteLine("ReCalc");
-    @*res = "";*@
-    @*Matches = null;*@
-    Matches = Regex.Matches(text, pattern, regexOptions);
-
-
+    Matches = Regex.Matches(text, model.Pattern, model.RegexOptions);
     }
 
     MarkupString
     Decor()
     {
-    return RegexHelper.Decor(text, pattern, Matches);
-    //return (MarkupString)Regex.Replace(text, "(\r)|(\n)|(\r\n)", "<br />");
+    return RegexHelper.Decor(text, model.Pattern, Matches);
     }
 
     }
