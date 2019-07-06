@@ -13,6 +13,15 @@ namespace RegexTesterBlazorClientSide.Pages
     }
     public class IndexModel
     {
+        public IndexModel()
+        {
+#if DEBUG
+            this.Pattern = "2(?<xx>.?)";
+            this.Text = "dadf 3  2s fdsf 2a g";
+            this.CsCode = "System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(\u0040\"abcd.*\");";
+#endif
+        }
+
         public RegexSourceEnum RegexSource { get; set; } = RegexSourceEnum.Pattern;
         public RegexOptions RegexOptions { get; set; } = RegexOptions.None;
         public bool RegexOptionsVisible { get; set; } = false;

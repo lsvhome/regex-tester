@@ -7,17 +7,9 @@
 
 <h1>C# Regex Tester</h1>
 
-@*<script type="text/javascript">
-
-        function RegexOptionsCheckboxClickedJS(name, value) {
-            debugger.log(mame);
-            //Debug.WriteLine(name + "="+value);
-        }
-
-    </script>*@
-    Text:
+Text:
 <br />
-<textarea id="fdfgc" class="wide" @bind="@text" @oninput="@ReCalcText">
+<textarea id="fdfgc" class="wide" @bind="@model.Text" @oninput="@ReCalcText">
 
 </textarea>
 <br />
@@ -34,14 +26,9 @@
                    onchange=@(eventArgs => { RegexOptionsChanged(each, (bool)eventArgs.Value); }) /> <label for="regexoptions">@each</label>
             </li>
         }
-
-    @*
-
-        aaa(@each, eventArgs.Value);
-
-
-    *@
 </ul>
+
+<br />
 <input type="radio" id="pattern" name="regexsourceradio" checked="@(model.RegexSource == RegexSourceEnum.Pattern)" onchange="@(() => model.RegexSource = RegexSourceEnum.Pattern)" />
 <label for="patterninput">Pattern:</label>
 <br />
@@ -51,9 +38,10 @@
 <input disabled type="radio" id="code" name="regexsourceradio" checked="@(model.RegexSource == RegexSourceEnum.CsCode)" onchange="@(() => model.RegexSource = RegexSourceEnum.CsCode)" />
 <label for="codeinput">C# Regex code for matching:</label>
 <br />
-<input id="codeinput" type="text" class="wide" @bind="@cscode" @oninput="@ReCalcCode" disabled="@(model.RegexSource != RegexSourceEnum.CsCode)" />
+<input id="codeinput" type="text" class="wide" @bind="@model.CsCode" @oninput="@ReCalcCode" disabled="@(model.RegexSource != RegexSourceEnum.CsCode)" />
 <br />
 
+<br />
 <input id="autoruncheckbox" type="checkbox" @bind="@model.Autorun" /> <label for="autoruncheckbox">AutoRun</label>
 <br />
 <button @onclick="@ReCalc">Run</button>
@@ -64,7 +52,7 @@
 
 
 <br />
-@if (Matches != null)
+@if (model.Matches != null)
 {
     @Decor()
 }
@@ -73,33 +61,16 @@
 
 @code
     {
-IndexModel model = new IndexModel();
-//bool RegexOptionsVisible = false;
-//    RegexOptions regexOptions = RegexOptions.None;
-   // public int RegexSource { get; set; } = 1;
-    //public bool autorun { get; set; } = true;
-    //private string pattern { get; set; }
-    public string cscode { get; set; }
-    public string text { get; set; }
-@*public string pattern1 { get; set; }*@
-@*public string res { get; set; } = "";*@
-    MatchCollection Matches { get; set; }
+    IndexModel model = new IndexModel();
+
 
     protected override async Task OnInitAsync()
     {
-    #if DEBUG
-    model.Pattern = "2(?"+"<"+"xx"+">"+".?)";
-@*pattern1 = "1";*@
-    text = "dadf 3  2s fdsf 2a g";
-    cscode = "System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(\u0040\"abcd.*\");";
-    #endif
     }
 
     async Task RegexOptionsChanged(string optionName, bool optionValue)
     {
-    //debugger.log(mame);
     Debug.WriteLine(optionName + "=" + optionValue);
-    //Debug.WriteLine(value);
     RegexOptions x = (RegexOptions)Enum.Parse(typeof(RegexOptions), optionName);
 
 
@@ -122,13 +93,7 @@ IndexModel model = new IndexModel();
     async Task ReCalcPattern(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
     {
 @*@((UIChangeEventArgs __e) => CurrentValue = __e.Value)*@
-    //object h = g.Value;
-    //string gds = (string)h;
     model.Pattern = (string)g.Value;
-    //    Debug.WriteLine(model.Pattern);
-    //Debug.WriteLine(g);
-
-    //res = model.Pattern + model.Pattern1;
     if (model.Autorun) ReCalc();
     }
 
@@ -137,7 +102,7 @@ IndexModel model = new IndexModel();
 
     async Task ReCalcText(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
     {
-    text = (string)g.Value;
+    model.Text = (string)g.Value;
     if (model.Autorun) ReCalc();
     }
 
@@ -147,13 +112,13 @@ IndexModel model = new IndexModel();
     async Task ReCalc()
     {
     Debug.WriteLine("ReCalc");
-    Matches = Regex.Matches(text, model.Pattern, model.RegexOptions);
+    model.Matches = Regex.Matches(model.Text, model.Pattern, model.RegexOptions);
     }
 
     MarkupString
     Decor()
     {
-    return RegexHelper.Decor(text, model.Pattern, Matches);
+    return RegexHelper.Decor(model.Text, model.Pattern, model.Matches);
     }
 
     }
