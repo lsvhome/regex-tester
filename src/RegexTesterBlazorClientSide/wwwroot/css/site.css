@@ -109,10 +109,8 @@ textarea.wide {
     width: 100%;
 }
 
-span.boldchar {
-text-decoration:underline;
-text-decoration-color:red;
-font-weight:bold;
+td.text {
+    color: gray;
 }
 
 span.group_0 {
@@ -122,16 +120,37 @@ span.group_0 {
     color:red;
 }
 
-span.group_0 {
+span.group_1 {
     text-decoration: underline;
     text-decoration-color: red;
     font-weight: bold;
     color: green;
 }
 
-span.group_xx {
+span.group_2 {
     text-decoration: underline;
     text-decoration-color: red;
+    font-weight: bold;
+    color: blue;
+}
+
+span.group_3 {
+    text-decoration: underline;
+    text-decoration-color: brown;
+    font-weight: bold;
+    color: blue;
+}
+
+span.group_4 {
+    text-decoration: underline;
+    text-decoration-color: aqua;
+    font-weight: bold;
+    color: blue;
+}
+
+span.group_5 {
+    text-decoration: underline;
+    text-decoration-color: orange;
     font-weight: bold;
     color: blue;
 }

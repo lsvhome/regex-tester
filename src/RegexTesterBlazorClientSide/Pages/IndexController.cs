@@ -41,73 +41,64 @@ namespace RegexTesterBlazorClientSide.Shared
         public static MarkupString Decor(string text,string pattern, MatchCollection matches)
         {
             Debug.WriteLine($"Decor 0");
-            text += "\n";
-            //System.Collections.Generic.
+            //text = text.Replace("\r\n","\n") + "\n";
+            text = text + "\n";
             gg[] g = new gg[text.Length];
+            int row = 0;
             for(int i = 0; i< text.Length; i++)
             {
-                g[i] = new gg { x = text[i].ToString() };
+                g[i] = new gg { x = text[i].ToString(), decorated = text[i].ToString() };
 
-                if (g[i].x == "\r" || g[i].x == "\n")
+                if (g[i].x == "\n")
                 {
                     g[i].decorated = "<br />";
+                    g[i].row = row;
                     Debug.WriteLine($"Decor 1");
+                    row++;
                 }
             }
 
-            StringBuilder ret = new StringBuilder();
+            StringBuilder ret0 = new StringBuilder();
+            StringBuilder ret1 = new StringBuilder();
             if (matches != null)
             {
                 string[] names = new Regex(pattern).GetGroupNames();
-                //Console.WriteLine("Named Groups:");
-                //foreach (string s in names)
-                //{
-                //    ret.Append(s);
-                //    ret.Append("<br />");
-                //}
+
                 foreach (Match m in matches)
                 {
-                    foreach (string s in names)
+                    //foreach (string s in names)
+                    for (int n = 0; n < names.Length; n++)
                     {
+                        string s = names[n];
                         var gr = m.Groups[s];
                         for (int i = gr.Index; i < gr.Index + gr.Length; i++)
                         {
                             //var b1 = m.Groups["xx"];
                             //bool b = gr[].GetType().GetProperty("Name") != null;
                             //var b = gr.ToString();
-                            g[i].decorated = $"<span class=\"group_{s}\">{g[i].x}</span>";
+                            g[i].decorated = $"<span class=\"group_{n}\">{g[i].x}</span>";
                         }
 
                     }
-
-                    //foreach (Group gr in m.Groups)
-                    //{
-                    //    for (int i = gr.Index; i < gr.Index + gr.Length; i++)
-                    //    {
-                    //        var b = m.Groups["xx"];
-                    //        //bool b = gr[].GetType().GetProperty("Name") != null;
-                    //        //var b = gr.ToString();
-                    //        g[i].decorated = $"<span class=\"group_{gr.Index}\">{gr.GetType().Name}|{b}|{g[i].x}</span>";
-                    //    }
-
-                    //}
                 }
+
+                for (int i = 0; i < g.Length; i++)
+                {
+                    ret0.Append(string.IsNullOrWhiteSpace(g[i].decorated) ? g[i].x : g[i].decorated);
+                }
+
+                //ret0 = ret0.Replace("<br />< br />", "<br />");
+
                 int last = 0;
                 for (int i = 0; i < text.Length; i++)
                 {
-                    if (g[i].x == "\r" || g[i].x == "\n")
+                    if (g[i].x == "\n")
                     {
                         var q = from f in matches.Cast<Match>()
                                 where f.Index >= last && f.Index+f.Length<=i
                                 select f;
                         Debug.WriteLine($"{i} q.cnt={q.Count()}");
-                        //string k = "";
-                        //foreach (var each in q)
-                        //{
-                        //    var t = names.Select(x => $"{{{x}}}={each.Groups[x].Value}");
-                        //    string s = $"{each.Value} {string.Join(" | ", t)}";
-                        //    k += s;
-                        //}
+
 
                         var qt = q.Select(each => {
                             var t = names.Select(x => $"{{{x}}}='{each.Groups[x].Value}'");
@@ -119,20 +110,26 @@ namespace RegexTesterBlazorClientSide.Shared
 
                         g[i].decorated = $"&nbsp;&nbsp;&nbsp;{string.Join("&nbsp;&nbsp;&nbsp;", qt)}<br />";
                         last = i;
+                        ret1.Append(string.IsNullOrWhiteSpace(g[i].decorated) ? g[i].x : g[i].decorated);
                     }
                 }
+
             }
 
-            for (int i = 0; i < g.Length; i++)
-            {
-                ret.Append(string.IsNullOrWhiteSpace(g[i].decorated) ? g[i].x : g[i].decorated);
-            }
-            return (MarkupString)ret.ToString();
-            //return (MarkupString)Regex.Replace(text, "(\r)|(\n)", "<br />");
+            string ff = $@"
+    <table width=""100%"">
+        <tr>
+            <td class=""text"">{(MarkupString)ret0.ToString()}</td>
+            <td class=""results"">{ (MarkupString)ret1.ToString()}</td>
+        </tr>
+    </table>
+";
+            return (MarkupString)ff;// new MarkupString[2] { (MarkupString)ret0.ToString(), (MarkupString)ret1.ToString() };
         }
 
         class gg
         {
+            public int row = 0;
             public string x;
             public string decorated;
         }

@@ -9,7 +9,7 @@
 
 Text:
 <br />
-<textarea id="fdfgc" class="wide" @bind="@model.Text" @oninput="@ReCalcText">
+<textarea id="fdfgc" rows="5" class="wide" @bind="@model.Text" @oninput="@ReCalcText">
 
 </textarea>
 <br />
@@ -46,16 +46,16 @@ Text:
 <br />
 <button @onclick="@ReCalc">Run</button>
 <br />
-
-
-    Results:
-
-
 <br />
+
+Results:
+<br />
+
 @if (model.Matches != null)
 {
     @Decor()
 }
+
 <br /><br /><br />
 
 
