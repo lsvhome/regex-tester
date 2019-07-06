@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 namespace RegexTesterBlazorClientSide.Shared
 {
-    public class RegexHelper
+    public class IndexController
     {
         public static string[] ff(string pattern, string text)
         {
