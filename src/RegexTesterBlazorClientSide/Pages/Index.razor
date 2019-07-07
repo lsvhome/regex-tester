@@ -1,7 +1,121 @@
 ﻿@page "/"
+@using System.Diagnostics
+@using System.Collections.Generic
+@using System
+@using System.Text.RegularExpressions;
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+<h1>C# Regex Tester</h1>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+Text:
+<br />
+<textarea id="fdfgc" rows="5" class="wide" @bind="@model.Text" @oninput="@ReCalcText">
+</textarea>
+<br />
+
+<button @onclick="@(()=>{model.RegexOptionsVisible=!model.RegexOptionsVisible;})">RegexOptions</button>
+<br />
+
+<ul style="display: @(model.RegexOptionsVisible ? "block":"none")">
+    @foreach (var each in Enum.GetNames(typeof(RegexOptions)))
+    {
+
+        <li>
+            <input id="regexoptions" type="checkbox" value="@each"
+                   onchange=@(eventArgs => { RegexOptionsChanged(each, (bool)eventArgs.Value); }) /> <label for="regexoptions">@each</label>
+            </li>
+        }
+</ul>
+
+<br />
+<input class="cscodedisabled" type="radio" id="pattern" name="regexsourceradio" checked="@(model.RegexSource == RegexSourceEnum.Pattern)" onchange="@(() => model.RegexSource = RegexSourceEnum.Pattern)" />
+<label for="patterninput">Pattern:</label>
+<br />
+<input id="patterninput" type="text" class="wide" @bind="@model.Pattern" @oninput="@ReCalcPattern" disabled="@(model.RegexSource != RegexSourceEnum.Pattern)" />
+<br />
+
+<input class="cscodedisabled" disabled type="radio" id="code" name="regexsourceradio" checked="@(model.RegexSource == RegexSourceEnum.CsCode)" onchange="@(() => model.RegexSource = RegexSourceEnum.CsCode)" />
+<label class="cscodedisabled" for="codeinput">C# Regex code for matching:</label>
+<br class="cscodedisabled" />
+<input id="codeinput" type="text" class="wide cscodedisabled" @bind="@model.CsCode" @oninput="@ReCalcCode" disabled="@(model.RegexSource != RegexSourceEnum.CsCode)" />
+<br class="cscodedisabled" />
+
+<br />
+<input id="autoruncheckbox" type="checkbox" @bind="@model.Autorun" /> <label for="autoruncheckbox">AutoRun</label>
+<br />
+<button @onclick="@ReCalc">Run</button>
+<br />
+<br />
+
+Results:
+<br />
+
+@if (model.Matches != null)
+{
+    @GetDecoratedTextWithMatches()
+}
+
+<br /><br /><br />
+
+
+@code
+{
+    IndexModel model = new IndexModel();
+
+    async Task RegexOptionsChanged(string optionName, bool optionValue)
+    {
+        Debug.WriteLine(optionName + "=" + optionValue);
+        RegexOptions changedRegexOption = (RegexOptions)Enum.Parse(typeof(RegexOptions), optionName);
+
+        if (optionValue)
+        {
+            model.RegexOptions = model.RegexOptions | changedRegexOption;
+        }
+        else
+        {
+            model.RegexOptions = model.RegexOptions ^ changedRegexOption;
+        }
+
+        Debug.WriteLine($"model.RegexOptions={(int)model.RegexOptions}");
+
+        if (model.Autorun)
+        {
+            ReCalc();
+        }
+    }
+
+    async Task ReCalcCode(Microsoft.AspNetCore.Components.UIChangeEventArgs args)
+    {
+    }
+
+    async Task ReCalcPattern(Microsoft.AspNetCore.Components.UIChangeEventArgs args)
+    {
+        model.Pattern = (string)args.Value;
+
+        if (model.Autorun)
+        {
+            ReCalc();
+        }
+    }
+
+    async Task ReCalcText(Microsoft.AspNetCore.Components.UIChangeEventArgs args)
+    {
+        model.Text = (string)args.Value;
+
+        if (model.Autorun)
+        {
+            ReCalc();
+        }
+    }
+
+    async Task ReCalc()
+    {
+        Debug.WriteLine("ReCalc");
+        model.Matches = Regex.Matches(model.Text, model.Pattern, model.RegexOptions);
+    }
+
+    MarkupString GetDecoratedTextWithMatches()
+    {
+        return IndexController.GetDecoratedTextWithMatches(model.Text, model.Pattern, model.Matches);
+    }
+}
