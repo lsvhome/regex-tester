@@ -16,6 +16,7 @@ md %dsttmp%
 git clone --separate-git-dir=%dst2%\.git  -l -b gh-pages . %dsttmp% 
 
 cd src
+dotnet clean
 
 dotnet  publish -c Release -o %dst%
 git --git-dir=%dst2%\.git --work-tree=%dst2% add . -u -f 
