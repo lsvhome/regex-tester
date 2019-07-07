@@ -14,6 +14,9 @@ set dst2=%dst%\Client\dist
 md %dst2%
 md %dsttmp%
 git clone --separate-git-dir=%dst2%\.git  -l -b gh-pages . %dsttmp% 
+
+cd src
+
 dotnet  publish -c Release -o %dst%
 git --git-dir=%dst2%\.git --work-tree=%dst2% add . -u -f 
 git --git-dir=%dst2%\.git --work-tree=%dst2% status
