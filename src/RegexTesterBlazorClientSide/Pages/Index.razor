@@ -28,13 +28,13 @@ Text:
 </ul>
 
 <br />
-<input type="radio" id="pattern" name="regexsourceradio" checked="@(model.RegexSource == RegexSourceEnum.Pattern)" onchange="@(() => model.RegexSource = RegexSourceEnum.Pattern)" />
-<label for="patterninput">Pattern:</label>
-<br />
-<input id="patterninput" type="text" class="wide" @bind="@model.Pattern" @oninput="@ReCalcPattern" disabled="@(model.RegexSource != RegexSourceEnum.Pattern)" />
-<br />
+<input class="cscodedisabled" type="radio" id="pattern" name="regexsourceradio" checked="@(model.RegexSource == RegexSourceEnum.Pattern)" onchange="@(() => model.RegexSource = RegexSourceEnum.Pattern)" />
+<label class="cscodedisabled" for="patterninput">Pattern:</label>
+<br  class="cscodedisabled" />
+<input id="patterninput" type="text" class="wide cscodedisabled" @bind="@model.Pattern" @oninput="@ReCalcPattern" disabled="@(model.RegexSource != RegexSourceEnum.Pattern)" />
+<br class="cscodedisabled" />
 
-<input disabled type="radio" id="code" name="regexsourceradio" checked="@(model.RegexSource == RegexSourceEnum.CsCode)" onchange="@(() => model.RegexSource = RegexSourceEnum.CsCode)" />
+<input class="cscodedisabled" disabled type="radio" id="code" name="regexsourceradio" checked="@(model.RegexSource == RegexSourceEnum.CsCode)" onchange="@(() => model.RegexSource = RegexSourceEnum.CsCode)" />
 <label for="codeinput">C# Regex code for matching:</label>
 <br />
 <input id="codeinput" type="text" class="wide" @bind="@model.CsCode" @oninput="@ReCalcCode" disabled="@(model.RegexSource != RegexSourceEnum.CsCode)" />

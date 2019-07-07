@@ -159,6 +159,10 @@ span.group_5 {
     margin: 200px auto;
 }
 
+.cscodedisabled {
+    display:none;
+}
+
 @media (max-width: 767.98px) {
     .main .top-row {
         display: none;
