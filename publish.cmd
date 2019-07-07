@@ -21,7 +21,7 @@ dotnet clean
 dotnet  publish -c Release -o %dst%
 git --git-dir=%dst2%\.git --work-tree=%dst2% add . -f
 git --git-dir=%dst2%\.git --work-tree=%dst2% status
-git --git-dir=%dst2%\.git --work-tree=%dst2% commit -m "Built %master-sha%"
+git --git-dir=%dst2%\.git --work-tree=%dst2% commit -m "Built %master-sha%" --allow-empty
 git --git-dir=%dst2%\.git --work-tree=%dst2% push origin gh-pages:gh-pages
 
 rd /s /q %dstx%
