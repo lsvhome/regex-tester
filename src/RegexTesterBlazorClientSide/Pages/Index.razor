@@ -10,7 +10,6 @@
 Text:
 <br />
 <textarea id="fdfgc" rows="5" class="wide" @bind="@model.Text" @oninput="@ReCalcText">
-
 </textarea>
 <br />
 
@@ -53,72 +52,70 @@ Results:
 
 @if (model.Matches != null)
 {
-    @Decor()
+    @GetDecoratedTextWithMatches()
 }
 
 <br /><br /><br />
 
 
 @code
-    {
+{
     IndexModel model = new IndexModel();
-
-
-    protected override async Task OnInitAsync()
-    {
-    }
 
     async Task RegexOptionsChanged(string optionName, bool optionValue)
     {
-    Debug.WriteLine(optionName + "=" + optionValue);
-    RegexOptions x = (RegexOptions)Enum.Parse(typeof(RegexOptions), optionName);
+        Debug.WriteLine(optionName + "=" + optionValue);
+        RegexOptions changedRegexOption = (RegexOptions)Enum.Parse(typeof(RegexOptions), optionName);
 
+        if (optionValue)
+        {
+            model.RegexOptions = model.RegexOptions | changedRegexOption;
+        }
+        else
+        {
+            model.RegexOptions = model.RegexOptions ^ changedRegexOption;
+        }
 
-    if (optionValue)
+        Debug.WriteLine($"model.RegexOptions={(int)model.RegexOptions}");
+
+        if (model.Autorun)
+        {
+            ReCalc();
+        }
+    }
+
+    async Task ReCalcCode(Microsoft.AspNetCore.Components.UIChangeEventArgs args)
     {
-    model.RegexOptions = model.RegexOptions | x;
     }
-    else
+
+    async Task ReCalcPattern(Microsoft.AspNetCore.Components.UIChangeEventArgs args)
     {
-    model.RegexOptions = model.RegexOptions ^ x;
-    }
-    Debug.WriteLine($"model.RegexOptions={(int)model.RegexOptions}");
-    if (model.Autorun) ReCalc();
+        model.Pattern = (string)args.Value;
+
+        if (model.Autorun)
+        {
+            ReCalc();
+        }
     }
 
-    async Task ReCalcCode(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
+    async Task ReCalcText(Microsoft.AspNetCore.Components.UIChangeEventArgs args)
     {
+        model.Text = (string)args.Value;
+
+        if (model.Autorun)
+        {
+            ReCalc();
+        }
     }
-
-    async Task ReCalcPattern(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
-    {
-@*@((UIChangeEventArgs __e) => CurrentValue = __e.Value)*@
-    model.Pattern = (string)g.Value;
-    if (model.Autorun) ReCalc();
-    }
-
-
-
-
-    async Task ReCalcText(Microsoft.AspNetCore.Components.UIChangeEventArgs g)
-    {
-    model.Text = (string)g.Value;
-    if (model.Autorun) ReCalc();
-    }
-
-
-
 
     async Task ReCalc()
     {
-    Debug.WriteLine("ReCalc");
-    model.Matches = Regex.Matches(model.Text, model.Pattern, model.RegexOptions);
+        Debug.WriteLine("ReCalc");
+        model.Matches = Regex.Matches(model.Text, model.Pattern, model.RegexOptions);
     }
 
-    MarkupString
-    Decor()
+    MarkupString GetDecoratedTextWithMatches()
     {
-    return IndexController.Decor(model.Text, model.Pattern, model.Matches);
+        return IndexController.GetDecoratedTextWithMatches(model.Text, model.Pattern, model.Matches);
     }
-
-    }
+}

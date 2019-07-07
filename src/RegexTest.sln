@@ -5,10 +5,6 @@ VisualStudioVersion = 16.0.29020.237
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegexTesterBlazorClientSide", "RegexTesterBlazorClientSide\RegexTesterBlazorClientSide.csproj", "{8BAF7E76-6710-4445-A82C-06AFC8E13053}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "ClassLibrary1\ClassLibrary1.csproj", "{75E8C274-FD88-4F2E-8D26-A8F9CE324976}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject1", "UnitTestProject1\UnitTestProject1.csproj", "{57402173-E545-4CF8-89A6-602AB027FE7C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,14 +15,6 @@ Global
 		{8BAF7E76-6710-4445-A82C-06AFC8E13053}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BAF7E76-6710-4445-A82C-06AFC8E13053}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BAF7E76-6710-4445-A82C-06AFC8E13053}.Release|Any CPU.Build.0 = Release|Any CPU
-		{75E8C274-FD88-4F2E-8D26-A8F9CE324976}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{75E8C274-FD88-4F2E-8D26-A8F9CE324976}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{75E8C274-FD88-4F2E-8D26-A8F9CE324976}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{75E8C274-FD88-4F2E-8D26-A8F9CE324976}.Release|Any CPU.Build.0 = Release|Any CPU
-		{57402173-E545-4CF8-89A6-602AB027FE7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{57402173-E545-4CF8-89A6-602AB027FE7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{57402173-E545-4CF8-89A6-602AB027FE7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{57402173-E545-4CF8-89A6-602AB027FE7C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
