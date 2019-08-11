@@ -1,21 +1,19 @@
 ﻿@page "/"
-@using System.Diagnostics
-@using System.Collections.Generic
-@using System
+@inherits IndexModel;
 @using System.Text.RegularExpressions;
 
 <h1>C# Regex Tester</h1>
 
 Text:
 <br />
-<textarea id="fdfgc" rows="5" class="wide" @bind="@model.Text" @oninput="@ReCalcText">
+<textarea id="fdfgc" rows="5" class="wide" @bind="@Text" @oninput="@ReCalcText">
 </textarea>
 <br />
 
-<button @onclick="@(()=>{model.RegexOptionsVisible=!model.RegexOptionsVisible;})">RegexOptions</button>
+<button @onclick="@(()=>{RegexOptionsVisible=!RegexOptionsVisible;})">RegexOptions</button>
 <br />
 
-<ul style="display: @(model.RegexOptionsVisible ? "block":"none")">
+<ul style="display: @(RegexOptionsVisible ? "block":"none")">
     @foreach (var each in Enum.GetNames(typeof(RegexOptions)))
     {
         <li>
@@ -26,20 +24,20 @@ Text:
 </ul>
 
 <br />
-<input class="cscodedisabled" type="radio" id="pattern" name="regexsourceradio" checked="@(model.RegexSource == RegexSourceEnum.Pattern)" @onchange="@(() => model.RegexSource = RegexSourceEnum.Pattern)" />
+<input class="cscodedisabled" type="radio" id="pattern" name="regexsourceradio" checked="@(RegexSource == RegexSourceEnum.Pattern)" @onchange="@(() => RegexSource = RegexSourceEnum.Pattern)" />
 <label for="patterninput">Pattern:</label>
 <br />
-<input id="patterninput" type="text" class="wide" @bind="@model.Pattern" @oninput="@ReCalcPattern" disabled="@(model.RegexSource != RegexSourceEnum.Pattern)" />
+<input id="patterninput" type="text" class="wide" @bind="@Pattern" @oninput="@ReCalcPattern" disabled="@(RegexSource != RegexSourceEnum.Pattern)" />
 <br />
 
-<input class="cscodedisabled" disabled type="radio" id="code" name="regexsourceradio" checked="@(model.RegexSource == RegexSourceEnum.CsCode)" @onchange="@(() => model.RegexSource = RegexSourceEnum.CsCode)" />
+<input class="cscodedisabled" disabled type="radio" id="code" name="regexsourceradio" checked="@(RegexSource == RegexSourceEnum.CsCode)" @onchange="@(() => { RegexSource = RegexSourceEnum.CsCode; })" />
 <label class="cscodedisabled" for="codeinput">C# Regex code for matching:</label>
 <br class="cscodedisabled" />
-<input id="codeinput" type="text" class="wide cscodedisabled" @bind="@model.CsCode" @oninput="@ReCalcCode" disabled="@(model.RegexSource != RegexSourceEnum.CsCode)" />
+<input id="codeinput" type="text" class="wide cscodedisabled" @bind="@CsCode" @oninput="@ReCalcCode" disabled="@(RegexSource != RegexSourceEnum.CsCode)" />
 <br class="cscodedisabled" />
 
 <br />
-<input id="autoruncheckbox" type="checkbox" @bind="@model.Autorun" /> <label for="autoruncheckbox">AutoRun</label>
+<input id="autoruncheckbox" type="checkbox" @bind="@Autorun" /> <label for="autoruncheckbox">AutoRun</label>
 <br />
 <button @onclick="@ReCalc">Run</button>
 <br />
@@ -48,71 +46,15 @@ Text:
 Results:
 <br />
 
-@if (model.Matches != null)
+@if (Matches != null)
 {
     @GetDecoratedTextWithMatches()
 }
 
-<br /><br /><br />
+<br />
+<br />
+<br />
 
 @code
 {
-    IndexModel model = new IndexModel();
-
-    async Task RegexOptionsChanged(string optionName, bool optionValue)
-    {
-        Debug.WriteLine(optionName + "=" + optionValue);
-        RegexOptions changedRegexOption = (RegexOptions)Enum.Parse(typeof(RegexOptions), optionName);
-
-        if (optionValue)
-        {
-            model.RegexOptions = model.RegexOptions | changedRegexOption;
         }
-        else
-        {
-            model.RegexOptions = model.RegexOptions ^ changedRegexOption;
-        }
-
-        Debug.WriteLine($"model.RegexOptions={(int)model.RegexOptions}");
-
-        if (model.Autorun)
-        {
-            ReCalc();
-        }
-    }
-
-    async Task ReCalcCode(Microsoft.AspNetCore.Components.ChangeEventArgs args)
-    {
-    }
-
-    async Task ReCalcPattern(Microsoft.AspNetCore.Components.ChangeEventArgs args)
-    {
-        model.Pattern = (string)args.Value;
-
-        if (model.Autorun)
-        {
-            ReCalc();
-        }
-    }
-
-    async Task ReCalcText(Microsoft.AspNetCore.Components.ChangeEventArgs args)
-    {
-        model.Text = (string)args.Value;
-
-        if (model.Autorun)
-        {
-            ReCalc();
-        }
-    }
-
-    async Task ReCalc()
-    {
-        Debug.WriteLine("ReCalc");
-        model.Matches = Regex.Matches(model.Text, model.Pattern, model.RegexOptions);
-    }
-
-    MarkupString GetDecoratedTextWithMatches()
-    {
-        return IndexController.GetDecoratedTextWithMatches(model.Text, model.Pattern, model.Matches);
-    }
-}
