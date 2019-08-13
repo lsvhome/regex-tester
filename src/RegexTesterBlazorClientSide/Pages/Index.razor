@@ -24,17 +24,17 @@ Text:
 </ul>
 
 <br />
-<input class="cscodedisabled" type="radio" id="pattern" name="regexsourceradio" checked="@(RegexSource == RegexSourceEnum.Pattern)" @onchange="@(() => RegexSource = RegexSourceEnum.Pattern)" />
+<input type="radio" id="pattern" name="regexsourceradio" checked="@(RegexSource == RegexSourceEnum.Pattern)" @onchange="@(() => RegexSource = RegexSourceEnum.Pattern)" />
 <label for="patterninput">Pattern:</label>
 <br />
 <input id="patterninput" type="text" class="wide" @bind="@Pattern" @oninput="@ReCalcPattern" disabled="@(RegexSource != RegexSourceEnum.Pattern)" />
 <br />
 
-<input class="cscodedisabled" disabled type="radio" id="code" name="regexsourceradio" checked="@(RegexSource == RegexSourceEnum.CsCode)" @onchange="@(() => { RegexSource = RegexSourceEnum.CsCode; })" />
-<label class="cscodedisabled" for="codeinput">C# Regex code for matching:</label>
-<br class="cscodedisabled" />
-<input id="codeinput" type="text" class="wide cscodedisabled" @bind="@CsCode" @oninput="@ReCalcCode" disabled="@(RegexSource != RegexSourceEnum.CsCode)" />
-<br class="cscodedisabled" />
+<input type="radio" id="code" name="regexsourceradio" checked="@(RegexSource == RegexSourceEnum.CsCode)" @onchange="@(() => { RegexSource = RegexSourceEnum.CsCode; })" />
+<label for="codeinput">C# Regex code for matching:</label>
+<br />
+<input id="codeinput" type="text" class="wide" @bind="@CsCode" @oninput="@ReCalcCode" disabled="@(RegexSource != RegexSourceEnum.CsCode)" />
+<br />
 
 <br />
 <input id="autoruncheckbox" type="checkbox" @bind="@Autorun" /> <label for="autoruncheckbox">AutoRun</label>
@@ -43,7 +43,7 @@ Text:
 <br />
 <br />
 
-Results:
+Results: @Error
 <br />
 
 @if (Matches != null)
