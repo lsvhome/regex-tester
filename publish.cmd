@@ -19,7 +19,7 @@ cd src
 dotnet clean
 
 dotnet  publish -c Release -o %dst%
-exit
+
 git --git-dir=%dst2%\.git --work-tree=%dst2% add . -f
 git --git-dir=%dst2%\.git --work-tree=%dst2% status
 git --git-dir=%dst2%\.git --work-tree=%dst2% commit -m "Built %master-sha%" --allow-empty
