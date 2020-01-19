@@ -100,7 +100,7 @@ officia deserunt mollit anim id est laborum.";
             }
         }
 
-        protected async Task ReCalcCode(Microsoft.AspNetCore.Components.UIChangeEventArgs args)
+        protected async Task ReCalcCode(ChangeEventArgs args)
         {
             this.CsCode = (string)args.Value;
 
@@ -110,7 +110,7 @@ officia deserunt mollit anim id est laborum.";
             }
         }
 
-        protected async Task ReCalcPattern(Microsoft.AspNetCore.Components.UIChangeEventArgs args)
+        protected async Task ReCalcPattern(ChangeEventArgs args)
         {
             this.Pattern = (string)args.Value;
 
@@ -120,7 +120,7 @@ officia deserunt mollit anim id est laborum.";
             }
         }
 
-        protected async Task ReCalcText(Microsoft.AspNetCore.Components.UIChangeEventArgs args)
+        protected async Task ReCalcText(ChangeEventArgs args)
         {
             this.Text = (string)args.Value;
 
@@ -238,10 +238,10 @@ officia deserunt mollit anim id est laborum.";
             return (MarkupString)result;
         }
 
-        protected override Task OnInitAsync()
+        protected override Task OnInitializedAsync()
         {
             Compiler.InitializeMetadataReferences(this.HttpClient);
-            return base.OnInitAsync();
+            return base.OnInitializedAsync();
         }
 
         private async Task CompileCsCodeAndRunInternal()

@@ -18,7 +18,7 @@ Text:
     {
         <li>
             <input id="regexoptions" type="checkbox" value="@each"
-                   onchange=@(eventArgs => { RegexOptionsChanged(each, (bool)eventArgs.Value); }) /> <label for="regexoptions">@each</label>
+                   @onchange=@(eventArgs => { RegexOptionsChanged(each, (bool)eventArgs.Value); }) /> <label for="regexoptions">@each</label>
         </li>
     }
 </ul>
@@ -29,13 +29,13 @@ Text:
 <br />
 <br />
 
-<input type="radio" id="pattern" name="regexsourceradio" checked="@(RegexSource == RegexSourceEnum.Pattern)" onchange="@(() => RegexSource = RegexSourceEnum.Pattern)" />
+<input type="radio" id="pattern" name="regexsourceradio" checked="@(RegexSource == RegexSourceEnum.Pattern)" @onchange="@(() => RegexSource = RegexSourceEnum.Pattern)" />
 <label for="patterninput">Pattern:</label>
 <br />
 <input id="patterninput" type="text" class="wide" @bind="@Pattern" @oninput="@ReCalcPattern" disabled="@(RegexSource != RegexSourceEnum.Pattern)" />
 <br />
 
-<input type="radio" id="code" name="regexsourceradio" checked="@(RegexSource == RegexSourceEnum.CsCode)" onchange="@(() => { RegexSource = RegexSourceEnum.CsCode; })" />
+<input type="radio" id="code" name="regexsourceradio" checked="@(RegexSource == RegexSourceEnum.CsCode)" @onchange="@(() => { RegexSource = RegexSourceEnum.CsCode; })" />
 <label for="codeinput">C# Regex code for matching:</label>
 <br />
 <input id="codeinput" type="text" class="wide" @bind="@CsCode" @oninput="@ReCalcCode" disabled="@(RegexSource != RegexSourceEnum.CsCode)" />
