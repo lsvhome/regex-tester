@@ -31,17 +31,17 @@
 
         public IndexModel()
         {
-            this.Text = @"Lorem ipsum dolor sit amet, consectetur adipiscing
-elit, sed do eiusmod tempor incididunt ut labore et
+            this.Text = @"<p>Lorem ipsum dolor sit amet, consectetur adipiscing</p>
+<b>elit, sed do eiusmod tempor incididunt ut labore et</b>
 dolore magna aliqua. Ut enim ad minim veniam,
 quis nostrud exercitation ullamco laboris nisi ut
-aliquip ex ea commodo consequat. Duis aute irure 
+aliquip ex ea commodo <b>consequat</b>. Duis aute irure
 dolor in reprehenderit in voluptate velit esse cillum
 dolore eu fugiat nulla pariatur. Excepteur sint
 occaecat cupidatat non proident, sunt in culpa qui
 officia deserunt mollit anim id est laborum.";
 
-            this.Pattern = "conse(?<lastchar>.?)";
+            this.Pattern = "(?<firstchar><)b>c(o(n)?)+se(?<lastchar>.?)";
             this.CsCode = "string pattern = \u0040\"dolo(?<lastchar>.?)\";";
         }
 
@@ -173,6 +173,10 @@ officia deserunt mollit anim id est laborum.";
                     decoratedInput[i].DecoratedSymbol = "<br />";
                     row++;
                 }
+                else if (System.Web.HttpUtility.HtmlEncode(decoratedInput[i].Symbol) != decoratedInput[i].Symbol)
+                {
+                    decoratedInput[i].DecoratedSymbol = System.Web.HttpUtility.HtmlEncode(decoratedInput[i].Symbol);
+                }
             }
 
             StringBuilder ret0 = new StringBuilder();
@@ -212,8 +216,8 @@ officia deserunt mollit anim id est laborum.";
 
                         var qt = q.Select(each =>
                         {
-                            var t = names.Select(x => $"{{{x}}}='{each.Groups[x].Value}'");
-                            string s = $"[ {each.Value} : {string.Join(" | ", t)} ]";
+                            var t = names.Select(x => $"{{{x}}}='{System.Web.HttpUtility.HtmlEncode(each.Groups[x].Value)}'");
+                            string s = $"[ {System.Web.HttpUtility.HtmlEncode(each.Value)} : {string.Join(" | ", t)} ]";
 
                             return s;
                         });
