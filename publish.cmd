@@ -13,6 +13,7 @@ set dsttmp=%dstx%\temp
 set dst2=%dst%\RegexTesterBlazorClientSide\dist
 md %dst2%
 md %dsttmp%
+git branch gh-pages origin/gh-pages
 git clone --separate-git-dir=%dst2%\.git  -l -b gh-pages . %dsttmp% 
 
 cd src
