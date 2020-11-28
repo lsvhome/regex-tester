@@ -8,45 +8,50 @@
 
 Text:
 <br />
-<textarea id="fdfgc" rows="5" class="wide" >
+<textarea id="fdfgc" rows="5" class="wide" @bind="@model.Text" @oninput="@ReCalcText">
 </textarea>
 <br />
 
-<button>RegexOptions</button>
+<button @onclick="@(()=>{model.RegexOptionsVisible=!model.RegexOptionsVisible;})">RegexOptions</button>
 <br />
 
-<ul style="display:none">
+<ul style="display: @(model.RegexOptionsVisible ? "block":"none")">
     @foreach (var each in Enum.GetNames(typeof(RegexOptions)))
     {
         <li>
-            <input id="regexoptions" type="checkbox" value="@each" />
+            <input id="regexoptions" type="checkbox" value="@each" @onchange=@(eventArgs => { RegexOptionsChanged(each, (bool)eventArgs.Value); }) />
             <label for="regexoptions">@each</label>
         </li>
     }
 </ul>
 
 <br />
-<input class="cscodedisabled" type="radio" id="pattern" name="regexsourceradio" />
+<input class="cscodedisabled" type="radio" id="pattern" name="regexsourceradio" checked="@(model.RegexSource == RegexSourceEnum.Pattern)" @onchange="@(() => model.RegexSource = RegexSourceEnum.Pattern)" />
 <label for="patterninput">Pattern:</label>
 <br />
-<input id="patterninput" type="text" class="wide" />
+<input id="patterninput" type="text" class="wide" @bind="@model.Pattern" @oninput="@ReCalcPattern" disabled="@(model.RegexSource != RegexSourceEnum.Pattern)" />
 <br />
 
-<input class="cscodedisabled" disabled type="radio" id="code" name="regexsourceradio" />
+<input class="cscodedisabled" disabled type="radio" id="code" name="regexsourceradio" checked="@(model.RegexSource == RegexSourceEnum.CsCode)" @onchange="@(() => model.RegexSource = RegexSourceEnum.CsCode)" />
 <label class="cscodedisabled" for="codeinput">C# Regex code for matching:</label>
 <br class="cscodedisabled" />
-<input id="codeinput" type="text" class="wide cscodedisabled" disabled />
+<input id="codeinput" type="text" class="wide cscodedisabled" @bind="@model.CsCode" @oninput="@ReCalcCode" disabled="@(model.RegexSource != RegexSourceEnum.CsCode)" />
 <br class="cscodedisabled" />
 
 <br />
-<input id="autoruncheckbox" type="checkbox" /> <label for="autoruncheckbox">AutoRun</label>
+<input id="autoruncheckbox" type="checkbox" @bind="@model.Autorun" /> <label for="autoruncheckbox">AutoRun</label>
 <br />
-<button>Run</button>
+<button @onclick="@ReCalc">Run</button>
 <br />
 <br />
 
 Results:
 <br />
+
+@if (model.Matches != null)
+{
+    @GetDecoratedTextWithMatches()
+}
 
 <br /><br /><br />
 
