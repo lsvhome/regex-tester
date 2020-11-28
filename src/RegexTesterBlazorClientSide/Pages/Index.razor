@@ -49,3 +49,65 @@ Results:
 <br />
 
 <br /><br /><br />
+
+@code
+{
+    IndexModel model = new IndexModel();
+
+    async Task RegexOptionsChanged(string optionName, bool optionValue)
+    {
+        Debug.WriteLine(optionName + "=" + optionValue);
+        RegexOptions changedRegexOption = (RegexOptions)Enum.Parse(typeof(RegexOptions), optionName);
+
+        if (optionValue)
+        {
+            model.RegexOptions = model.RegexOptions | changedRegexOption;
+        }
+        else
+        {
+            model.RegexOptions = model.RegexOptions ^ changedRegexOption;
+        }
+
+        Debug.WriteLine($"model.RegexOptions={(int)model.RegexOptions}");
+
+        if (model.Autorun)
+        {
+            ReCalc();
+        }
+    }
+
+    async Task ReCalcCode(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+    }
+
+    async Task ReCalcPattern(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        model.Pattern = (string)args.Value;
+
+        if (model.Autorun)
+        {
+            ReCalc();
+        }
+    }
+
+    async Task ReCalcText(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        model.Text = (string)args.Value;
+
+        if (model.Autorun)
+        {
+            ReCalc();
+        }
+    }
+
+    async Task ReCalc()
+    {
+        Debug.WriteLine("ReCalc");
+        model.Matches = Regex.Matches(model.Text, model.Pattern, model.RegexOptions);
+    }
+
+    MarkupString GetDecoratedTextWithMatches()
+    {
+        return IndexController.GetDecoratedTextWithMatches(model.Text, model.Pattern, model.Matches);
+    }
+}
