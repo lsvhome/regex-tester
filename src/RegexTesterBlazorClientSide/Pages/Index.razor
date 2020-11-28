@@ -1,5 +1,51 @@
 ﻿@page "/"
+@using System.Diagnostics
+@using System.Collections.Generic
+@using System
+@using System.Text.RegularExpressions;
 
-<h1>Hello, world!</h1>
+<h1>C# Regex Tester</h1>
 
-Welcome to your new app.
+Text:
+<br />
+<textarea id="fdfgc" rows="5" class="wide" >
+</textarea>
+<br />
+
+<button>RegexOptions</button>
+<br />
+
+<ul style="display:none">
+    @foreach (var each in Enum.GetNames(typeof(RegexOptions)))
+    {
+        <li>
+            <input id="regexoptions" type="checkbox" value="@each" />
+            <label for="regexoptions">@each</label>
+        </li>
+    }
+</ul>
+
+<br />
+<input class="cscodedisabled" type="radio" id="pattern" name="regexsourceradio" />
+<label for="patterninput">Pattern:</label>
+<br />
+<input id="patterninput" type="text" class="wide" />
+<br />
+
+<input class="cscodedisabled" disabled type="radio" id="code" name="regexsourceradio" />
+<label class="cscodedisabled" for="codeinput">C# Regex code for matching:</label>
+<br class="cscodedisabled" />
+<input id="codeinput" type="text" class="wide cscodedisabled" disabled />
+<br class="cscodedisabled" />
+
+<br />
+<input id="autoruncheckbox" type="checkbox" /> <label for="autoruncheckbox">AutoRun</label>
+<br />
+<button>Run</button>
+<br />
+<br />
+
+Results:
+<br />
+
+<br /><br /><br />
