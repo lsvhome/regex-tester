@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Net.Http;
@@ -22,19 +23,50 @@
         {
             async Task InitializeInternal()
             {
-                var response = await client.GetJsonAsync<BlazorBoot>("_framework/blazor.boot.json");
-                var assemblies = await Task.WhenAll(response.assemblyReferences.Where(x => x.EndsWith(".dll")).Select(x => client.GetAsync("_framework/_bin/" + x)));
-
-                var references = new List<MetadataReference>(assemblies.Length);
-                foreach (var asm in assemblies)
+                try
                 {
-                    using (var task = await asm.Content.ReadAsStreamAsync())
-                    {
-                        references.Add(MetadataReference.CreateFromStream(task));
-                    }
-                }
 
-                Compiler.references = references;
+                    Debug.WriteLine("Info #867587709809-01: InitializeInternal -");
+                    var response = await client.GetJsonAsync<BlazorBoot>("_framework/blazor.boot.json");
+                    Debug.WriteLine($"Info #867587709809-02: InitializeInternal {response?.assemblies?.Length}");
+                    var l = new List<string>();
+                    Debug.WriteLine("Info #867587709809-01: InitializeInternal 02-01");
+                    //l.Add("System.Core.dll");
+
+                    if (response?.assemblies != null)
+                        l.AddRange(response.assemblies?.Where(x => x.EndsWith(".dll")));
+                    //var f = response.assemblyReferences?.Where(x => x.EndsWith(".dll")).ToList();
+
+                    Debug.WriteLine("Info #867587709809-01: InitializeInternal 02-02");
+
+                    var f1 = l.Select(x => client.GetAsync("_framework/_bin/" + x))?.ToArray() ?? new Task<HttpResponseMessage>[0];
+
+                    Debug.WriteLine("Info #867587709809-01: InitializeInternal 02-03");
+
+                    var assemblies = await Task.WhenAll(f1);
+
+
+                    Debug.WriteLine($"Info #867587709809-03: InitializeInternal {assemblies.Length}");
+                    var references = new List<MetadataReference>(assemblies.Length);
+                    foreach (var asm in assemblies)
+                    {
+                        Debug.WriteLine($"Info #867587709809-04: InitializeInternal");
+                        using (var task = await asm.Content.ReadAsStreamAsync())
+                        {
+                            references.Add(MetadataReference.CreateFromStream(task));
+                        }
+                    }
+
+                    Debug.WriteLine("Info #867587709809-05: InitializeInternal");
+                    Compiler.references = references;
+                    Debug.WriteLine("Info #867587709809-06: InitializeInternal");
+
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error #867587709809-00001: InitializeInternal {ex.ToString()}");
+
+                }
             }
 
             initializationTask = InitializeInternal();
@@ -109,7 +141,7 @@
             public string entryPoint { get; set; }
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Auto generated name")]
-            public string[] assemblyReferences { get; set; }
+            public string[] assemblies { get; set; }
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Auto generated name")]
             public string[] cssReferences { get; set; }

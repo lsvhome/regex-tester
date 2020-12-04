@@ -251,14 +251,17 @@ officia deserunt mollit anim id est laborum.";
         private async Task CompileCsCodeAndRunInternal()
         {
             this.Matches = null;
-            string code = @"using System;
+            string code = @"
+using System;
 class Program
 {
     public static void Main(){}
     public static string GetPattern()
     {"
-    + this.CsCode +
+    +
+this.CsCode +
 @"
+//string pattern = string.Empty;
     return pattern;
     }
 }";
