@@ -4,12 +4,19 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("RegexUtilsTests")]
+
+
 namespace RegexTesterBlazorClientSide
 {
     public class Program
     {
         public static async Task Main(string[] args)
         {
+
+#if DEBUG
+            System.Diagnostics.Trace.Listeners.Add(new System.Diagnostics.ConsoleTraceListener { Name = "consoleLog" });
+#endif
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 

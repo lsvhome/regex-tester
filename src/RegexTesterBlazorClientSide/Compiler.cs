@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Net.Http;
@@ -23,9 +24,13 @@
             async Task InitializeInternal()
             {
                 var response = await client.GetJsonAsync<BlazorBoot>("_framework/blazor.boot.json");
-                var assemblies = await Task.WhenAll(response.assemblyReferences.Where(x => x.EndsWith(".dll")).Select(x => client.GetAsync("_framework/_bin/" + x)));
 
-                var references = new List<MetadataReference>(assemblies.Length);
+                string[] assemblyNames = response.resources.assembly.Keys.ToArray().Where(x => x.EndsWith(".dll")).ToArray();
+
+                var assemblies = await Task.WhenAll(assemblyNames.Select(x => client.GetAsync("_framework/" + x)));
+
+                var references = new List<MetadataReference>(assemblyNames.Length);
+
                 foreach (var asm in assemblies)
                 {
                     using (var task = await asm.Content.ReadAsStreamAsync())
@@ -42,6 +47,12 @@
 
         public static void WhenReady(Func<Task> action)
         {
+            if (initializationTask == null)
+            {
+                Debug.Fail("Error #845739648: Pattern");
+                return;
+            }
+
             if (initializationTask.Status != TaskStatus.RanToCompletion)
             {
                 initializationTask.ContinueWith(x => action());
@@ -67,14 +78,14 @@
                 switch (diag.Severity)
                 {
                     case DiagnosticSeverity.Info:
-                        Console.WriteLine(diag.ToString());
+                        Debug.WriteLine(diag.ToString());
                         break;
                     case DiagnosticSeverity.Warning:
-                        Console.WriteLine(diag.ToString());
+                        Debug.WriteLine(diag.ToString());
                         break;
                     case DiagnosticSeverity.Error:
                         error = true;
-                        Console.WriteLine(diag.ToString());
+                        Debug.WriteLine(diag.ToString());
                         break;
                 }
             }
@@ -119,6 +130,15 @@
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Auto generated name")]
             public bool linkerEnabled { get; set; }
+
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Auto generated name")]
+            public Resources resources { get; set; }
+
+            internal class Resources
+            {
+                [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Auto generated name")]
+                public Dictionary<string, string> assembly { get; set; }
+            }
         }
     }
 }

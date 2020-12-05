@@ -238,10 +238,10 @@ officia deserunt mollit anim id est laborum.";
             return (MarkupString)result;
         }
 
-        protected override Task OnInitAsync()
+        protected override Task OnInitializedAsync()
         {
             Compiler.InitializeMetadataReferences(this.HttpClient);
-            return base.OnInitAsync();
+            return base.OnInitializedAsync();
         }
 
         private async Task CompileCsCodeAndRunInternal()
