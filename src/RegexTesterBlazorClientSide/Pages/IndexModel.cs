@@ -100,7 +100,7 @@ officia deserunt mollit anim id est laborum.";
             }
         }
 
-        protected async Task ReCalcCode(ChangeEventArgs args)
+        protected async Task ReCalcCode(Microsoft.AspNetCore.Components.ChangeEventArgs args)
         {
             this.CsCode = (string)args.Value;
 
@@ -110,7 +110,7 @@ officia deserunt mollit anim id est laborum.";
             }
         }
 
-        protected async Task ReCalcPattern(ChangeEventArgs args)
+        protected async Task ReCalcPattern(Microsoft.AspNetCore.Components.ChangeEventArgs args)
         {
             this.Pattern = (string)args.Value;
 
@@ -120,7 +120,7 @@ officia deserunt mollit anim id est laborum.";
             }
         }
 
-        protected async Task ReCalcText(ChangeEventArgs args)
+        protected async Task ReCalcText(Microsoft.AspNetCore.Components.ChangeEventArgs args)
         {
             this.Text = (string)args.Value;
 

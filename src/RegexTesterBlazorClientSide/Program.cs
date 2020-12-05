@@ -1,16 +1,26 @@
-﻿namespace RegexTesterBlazorClientSide
-{
-    using Microsoft.AspNetCore.Blazor.Hosting;
+﻿using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("RegexUtilsTests")]
+
+namespace RegexTesterBlazorClientSide
+{
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
-        }
+#if DEBUG
+            System.Diagnostics.Trace.Listeners.Add(new System.Diagnostics.ConsoleTraceListener { Name = "consoleLog" });
+#endif
+            var builder = WebAssemblyHostBuilder.CreateDefault(args);
+            builder.RootComponents.Add<App>("#app");
 
-        public static IWebAssemblyHostBuilder CreateHostBuilder(string[] args) =>
-            BlazorWebAssemblyHost.CreateDefaultBuilder()
-                .UseBlazorStartup<Startup>();
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+            await builder.Build().RunAsync();
+        }
     }
 }

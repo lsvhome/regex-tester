@@ -17,8 +17,8 @@ Text:
     @foreach (var each in Enum.GetNames(typeof(RegexOptions)))
     {
         <li>
-            <input id="regexoptions" type="checkbox" value="@each"
-                   @onchange=@(eventArgs => { RegexOptionsChanged(each, (bool)eventArgs.Value); }) /> <label for="regexoptions">@each</label>
+            <input id="regexoptions" type="checkbox" value="@each" @onchange=@(async eventArgs => { await RegexOptionsChanged(each, (bool)eventArgs.Value); }) />
+            <label for="regexoptions">@each</label>
         </li>
     }
 </ul>
@@ -59,7 +59,6 @@ Results: @Error
 <br />
 <br />
 <br />
-
 
 @code
 {
