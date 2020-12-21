@@ -39,6 +39,8 @@ git ls-files --deleted -z | xargs -0 git rm
 git add -u -f :/
 git add -f :/
 git commit -m "Built %master-sha%" --allow-empty
+TortoiseGitProc.exe /command:repostatus
+pause
 git push origin gh-pages:gh-pages
 
 cd ..
@@ -47,5 +49,5 @@ start http-server
 start chrome --guest http://localhost:8080/regex-tester
 cd %srcDir%
 gitk HEAD gh-pages
-rd /s /q %dstx%
+rem rd /s /q %dstx%
 
