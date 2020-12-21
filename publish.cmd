@@ -47,6 +47,5 @@ start http-server
 start chrome --guest http://localhost:8080/regex-tester
 cd %srcDir%
 gitk HEAD gh-pages
-pause
-rem rd /s /q %dstx%
+rd /s /q %dstx%
 
