@@ -22,12 +22,15 @@ dotnet clean
 
 cd RegexTesterBlazorClientSide
 
+dotnet clean
+
+rd /s /q bin
+rd /s /q obj
+
 dotnet  publish -c Release -o %dst%
 
 cd %dst2%
 
-del *.br /S
-del *.gz /S
 del *.log /S
 
 git ls-files --deleted -z | xargs -0 git rm
@@ -39,7 +42,7 @@ git push origin gh-pages:gh-pages
 cd ..
 mklink /D /J regex-tester wwwroot
 start http-server
-start chrome -incognito http://localhost:8080/regex-tester
+start chrome --guest http://localhost:8080/regex-tester
 cd %srcDir%
 gitk HEAD gh-pages
 pause
