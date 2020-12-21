@@ -33,6 +33,8 @@ cd %dst2%
 
 del *.log /S
 
+echo dotnet.5.0.1.js binary > %dst2%\.gitattributes
+
 git ls-files --deleted -z | xargs -0 git rm
 git add -u -f :/
 git add -f :/
