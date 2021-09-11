@@ -11,6 +11,8 @@
     <link href="css/custom.css" rel="stylesheet" />
     <link href="RegexTesterBlazorClientSide.styles.css" rel="stylesheet" />
     <link rel="icon" type="image/png" href="icon.png" />
+    <link href="manifest.json" rel="manifest" />
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-7723607-64"></script>
@@ -39,6 +41,7 @@
         <a class="dismiss">🗙</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
+    <script>navigator.serviceWorker.register('service-worker.js');</script>
 </body>
 
 </html>

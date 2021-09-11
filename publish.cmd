@@ -33,13 +33,15 @@ cd %dst2%
 
 del *.log /S
 
-echo dotnet.5.0.1.js binary > %dst2%\.gitattributes
+echo *.* binary > %dst2%\.gitattributes
+echo %master-sha% > %dst2%\version.txt
 
 git ls-files --deleted -z | xargs -0 git rm
 git add -u -f :/
 git add -f :/
 git commit -m "Built %master-sha%" --allow-empty
 TortoiseGitProc.exe /command:repostatus
+git gui
 pause
 git push origin gh-pages:gh-pages
 
