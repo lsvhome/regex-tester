@@ -21,7 +21,7 @@
       "url": "css\/bootstrap\/bootstrap.min.css.map"
     },
     {
-      "hash": "sha256-+yosfxhI+jFzSDbzZFLx1Rfl2iYe+T5jEjKbJfIYSVM=",
+      "hash": "sha256-k1G70tKAQDrDiRXgAZ38Bn57WjqOaFyjrR\/vJ5k8Cyo=",
       "url": "css\/custom.css"
     },
     {
@@ -433,5 +433,5 @@
       "url": "_framework\/blazor.webassembly.js"
     }
   ],
-  "version": "bAAyUIyT"
+  "version": "mcX8\/v6W"
 };
