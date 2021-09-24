@@ -1,4 +1,5 @@
 @echo off
+SET PATH=%PATH%;C:\Program Files\Git\usr\bin;
 SET srcDir=%cd%
 set dstx=%srcDir%-%RANDOM%
 
