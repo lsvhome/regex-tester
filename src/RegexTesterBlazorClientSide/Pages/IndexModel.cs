@@ -41,7 +41,7 @@ dolore eu fugiat nulla pariatur. Excepteur sint
 occaecat cupidatat non proident, sunt in culpa qui
 officia deserunt mollit anim id est laborum.";
 
-            this.Pattern = "(?<firstchar><)b>c(o(n)?)+se(?<lastchar>.?)";
+            this.TextPattern = "(?<firstchar><)b>c(o(n)?)+se(?<lastchar>.?)";
             this.CsCode = "string pattern = \u0040\"dolo(?<lastchar>.?)\";";
         }
 
@@ -67,6 +67,8 @@ officia deserunt mollit anim id est laborum.";
         public bool RegexOptionsVisible { get; set; } = false;
 
         public string Pattern { get; set; }
+
+        public string TextPattern { get; set; }
 
         public string CsCode { get; set; }
 
@@ -112,7 +114,7 @@ officia deserunt mollit anim id est laborum.";
 
         protected async Task ReCalcPattern(Microsoft.AspNetCore.Components.ChangeEventArgs args)
         {
-            this.Pattern = (string)args.Value;
+            this.TextPattern = (string)args.Value;
 
             if (this.Autorun)
             {
@@ -137,6 +139,7 @@ officia deserunt mollit anim id est laborum.";
             this.Error = null;
             if (this.RegexSource == RegexSourceEnum.Pattern)
             {
+                this.Pattern = this.TextPattern;
                 Debug.WriteLine("Info #92387689506: Pattern");
                 await Task.Factory.StartNew(() =>
                 {
@@ -284,6 +287,7 @@ class Program
                     {
                         if (result is string pattern)
                         {
+                            this.Pattern = pattern;
                             this.Matches = System.Text.RegularExpressions.Regex.Matches(this.Text, pattern);
                             Debug.WriteLine("Matches replaced");
                         }
@@ -304,7 +308,7 @@ class Program
             }
 
             this.StateHasChanged();
-            Debug.WriteLine("Compiling and Running code ENd");
+            Debug.WriteLine("Compiling and Running code End");
         }
 
         public class CharDecorator

@@ -34,7 +34,7 @@ Text:
 <input type="radio" id="pattern" name="regexsourceradio" checked="@(RegexSource == RegexSourceEnum.Pattern)" @onchange="@(() => RegexSource = RegexSourceEnum.Pattern)" />
 <label for="patterninput">Pattern:</label>
 <br />
-<input id="patterninput" type="text" class="wide" @bind="@Pattern" @oninput="@ReCalcPattern" disabled="@(RegexSource != RegexSourceEnum.Pattern)" />
+<input id="patterninput" type="text" class="wide" @bind="@TextPattern" @oninput="@ReCalcPattern" disabled="@(RegexSource != RegexSourceEnum.Pattern)" />
 <br />
 
 <input type="radio" id="code" name="regexsourceradio" checked="@(RegexSource == RegexSourceEnum.CsCode)" @onchange="@(() => { RegexSource = RegexSourceEnum.CsCode; })" />
