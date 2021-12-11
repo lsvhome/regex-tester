@@ -214,9 +214,9 @@ officia deserunt mollit anim id est laborum.";
                         var q = from f in matches.Cast<Match>()
                                 where f.Index >= last && f.Index + f.Length <= i
                                 select f;
-
+                        /*
                         Debug.WriteLine($"{i} q.cnt={q.Count()}");
-
+                        */
                         var qt = q.Select(each =>
                         {
                             var t = names.Select(x => $"{{{x}}}='{System.Web.HttpUtility.HtmlEncode(each.Groups[x].Value)}'");
@@ -224,9 +224,9 @@ officia deserunt mollit anim id est laborum.";
 
                             return s;
                         });
-
+                        /*
                         Debug.WriteLine($"{i} qt.cnt={qt.Count()}");
-
+                        */
                         decoratedInput[i].DecoratedSymbol = $"&nbsp;&nbsp;&nbsp;{string.Join("&nbsp;&nbsp;&nbsp;", qt)}<br />";
                         last = i;
                         ret1.Append(string.IsNullOrWhiteSpace(decoratedInput[i].DecoratedSymbol) ? decoratedInput[i].Symbol : decoratedInput[i].DecoratedSymbol);
