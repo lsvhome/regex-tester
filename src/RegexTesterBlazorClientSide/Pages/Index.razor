@@ -36,6 +36,7 @@ Text:
 <br />
 <input id="patterninput" type="text" class="wide" @bind="@TextPattern" @oninput="@ReCalcPattern" disabled="@(RegexSource != RegexSourceEnum.Pattern)" />
 <br />
+<br />
 
 <input type="radio" id="code" name="regexsourceradio" checked="@(RegexSource == RegexSourceEnum.CsCode)" @onchange="@(() => { RegexSource = RegexSourceEnum.CsCode; })" />
 <label for="codeinput">C# Regex code for matching:</label>

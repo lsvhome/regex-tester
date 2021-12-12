@@ -3,9 +3,9 @@
     "RegexTesterBlazorClientSide": {
       "commandName": "Project",
       "commandLineArgs": "--pathbase=/regex-tester",
+      "launchBrowser": true,
       "launchUrl": "regex-tester/",
-      "applicationUrl": "http://localhost:5000;https://localhost:5001",
-      "launchBrowser": true
+      "applicationUrl": "http://localhost:5000;https://localhost:5001"
     }
   }
 }
