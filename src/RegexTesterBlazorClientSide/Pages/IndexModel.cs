@@ -143,7 +143,14 @@ officia deserunt mollit anim id est laborum.";
                 Debug.WriteLine("Info #92387689506: Pattern");
                 await Task.Factory.StartNew(() =>
                 {
-                    this.Matches = Regex.Matches(this.Text, this.Pattern, this.RegexOptions);
+                    try
+                    {
+                        this.Matches = Regex.Matches(this.Text, this.Pattern, this.RegexOptions);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Error #923587689506: {ex}");
+                    }
                 });
             }
             else if (this.RegexSource == RegexSourceEnum.CsCode)
