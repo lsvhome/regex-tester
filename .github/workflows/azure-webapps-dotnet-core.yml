@@ -67,10 +67,10 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release src/RegexTesterBlazorClientSide/RegexTesterBlazorClientSide.csproj
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/publish  src/RegexTesterBlazorClientSide/RegexTesterBlazorClientSide.csproj
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
