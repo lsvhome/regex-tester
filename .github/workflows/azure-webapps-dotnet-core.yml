@@ -73,9 +73,10 @@ jobs:
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/publish  src/RegexTesterBlazorClientSide/RegexTesterBlazorClientSide.csproj
 
       - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
+#        uses: actions/upload-artifact@v4
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: wasm-app
+          name: github-pages
           path: ${{env.DOTNET_ROOT}}/publish/wwwroot
 
   # Deployment job
